@@ -17,13 +17,23 @@ import {
   MenuList,
   useDisclosure,
 } from "@chakra-ui/react";
+// Importa vários componentes do Chakra UI para o layout, navegação e funcionalidades visuais
+
 import { Link } from "react-router-dom";
+// Importa `Link` para navegação entre rotas
+
 import { useAuth } from "../context/useAuth";
+// Importa `useAuth` para acessar o contexto de autenticação (ex. dados do usuário e funções de login/logout)
+
 import { HamburgerIcon, SearchIcon } from "@chakra-ui/icons";
+// Ícones de hambúrguer e busca do Chakra UI
 
 const Navbar = () => {
   const { user, signInWithGoogle, logout } = useAuth();
+  // Extrai o `user` e as funções `signInWithGoogle` e `logout` do contexto de autenticação
+
   const { onOpen, isOpen, onClose } = useDisclosure();
+  // Gerencia o estado do Drawer (aberto ou fechado) para o menu móvel
 
   const handleGoogleLogin = async () => {
     try {
@@ -33,6 +43,7 @@ const Navbar = () => {
       console.log("errr", error);
     }
   };
+  // Função para fazer login com o Google e exibir mensagens de sucesso/erro no console
 
   return (
     <Box py="4" mb="2">
@@ -49,6 +60,7 @@ const Navbar = () => {
               NEXTLAB
             </Box>
           </Link>
+          {/* Logotipo e link para a página inicial */}
 
           {/* DESKTOP */}
           <Flex
@@ -62,6 +74,8 @@ const Navbar = () => {
             <Link to="/search">
               <SearchIcon fontSize={"xl"} />
             </Link>
+            {/* Links de navegação para diferentes seções da aplicação (exibido apenas em desktop) */}
+
             {user && (
               <Menu>
                 <MenuButton>
@@ -80,6 +94,8 @@ const Navbar = () => {
                 </MenuList>
               </Menu>
             )}
+            {/* Se o usuário está logado, exibe um menu com a lista de assistidos e a opção de logout */}
+            
             {!user && (
               <Avatar
                 size={"sm"}
@@ -88,9 +104,10 @@ const Navbar = () => {
                 onClick={handleGoogleLogin}
               />
             )}
+            {/* Se o usuário não está logado, exibe um avatar que inicia o login ao clicar */}
           </Flex>
 
-          {/* Mobile */}
+          {/* MOBILE */}
           <Flex
             display={{ base: "flex", md: "none" }}
             alignItems={"center"}
@@ -99,7 +116,11 @@ const Navbar = () => {
             <Link to="/search">
               <SearchIcon fontSize={"xl"} />
             </Link>
+            {/* Ícone de busca para navegação móvel */}
+
             <IconButton onClick={onOpen} icon={<HamburgerIcon />} />
+            {/* Botão hambúrguer que abre o menu Drawer no modo móvel */}
+
             <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
               <DrawerOverlay />
               <DrawerContent bg={"black"}>
@@ -121,6 +142,7 @@ const Navbar = () => {
                     />
                   )}
                 </DrawerHeader>
+                {/* Exibe o nome do usuário logado ou um avatar para login no Drawer (menu lateral) */}
 
                 <DrawerBody>
                   <Flex flexDirection={"column"} gap={"4"} onClick={onClose}>
@@ -139,10 +161,12 @@ const Navbar = () => {
                         </Button>
                       </>
                     )}
+                    {/* Links de navegação no Drawer (modo móvel) e opções adicionais para o usuário logado */}
                   </Flex>
                 </DrawerBody>
               </DrawerContent>
             </Drawer>
+            {/* Menu Drawer exibido no modo móvel */}
           </Flex>
         </Flex>
       </Container>
@@ -151,3 +175,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+// Exporta o componente Navbar para uso em outras partes da aplicação

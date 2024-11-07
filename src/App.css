@@ -1,42 +1,52 @@
+/* O estilo global para o elemento #root */
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  max-width: 1280px; /* Limita a largura máxima do conteúdo para 1280px */
+  margin: 0 auto; /* Centraliza o conteúdo horizontalmente */
+  padding: 2rem; /* Adiciona um espaçamento interno de 2rem */
+  text-align: center; /* Alinha o texto ao centro */
 }
 
+/* Estilo da classe .logo */
 .logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+  height: 6em; /* Define a altura da logo para 6em */
+  padding: 1.5em; /* Adiciona um espaçamento interno de 1.5em */
+  will-change: filter; /* Informa ao navegador que a propriedade 'filter' pode ser alterada, ajudando na performance */
+  transition: filter 300ms; /* Aplica uma transição suave de 300ms quando a propriedade 'filter' for alterada */
 }
 
+/* Efeito hover para a logo */
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa); /* Aplica uma sombra projetada na logo quando o cursor passa sobre ela */
+}
+
+/* Efeito hover específico para a logo com a classe 'react' */
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa); /* Aplica uma sombra projetada com uma cor diferente para a logo com a classe 'react' */
+}
+
+/* Definição da animação 'logo-spin' */
 @keyframes logo-spin {
   from {
-    transform: rotate(0deg);
+    transform: rotate(0deg); /* Começa a animação com a logo sem rotação */
   }
   to {
-    transform: rotate(360deg);
+    transform: rotate(360deg); /* Finaliza a animação com a logo girando 360 graus */
   }
 }
 
+/* Aplica a animação de rotação contínua para a logo, mas somente se o usuário não tiver preferência por reduzir animações */
 @media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+  a:nth-of-type(2) .logo { /* Aplica ao segundo link que contém uma logo */
+    animation: logo-spin infinite 20s linear; /* Faz a logo girar continuamente em 20 segundos */
   }
 }
 
+/* Estilo da classe .card */
 .card {
-  padding: 2em;
+  padding: 2em; /* Adiciona um espaçamento interno de 2em */
 }
 
+/* Estilo da classe .read-the-docs */
 .read-the-docs {
-  color: #e00707;
+  color: #e00707; /* Define a cor do texto para um vermelho específico */
 }

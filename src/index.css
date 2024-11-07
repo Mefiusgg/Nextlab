@@ -1,5 +1,10 @@
 :root {
+  /* Define a fonte padrão para o site. Ela é a 'Inter' se disponível, caso contrário, usa outras fontes como system-ui, Avenir, Helvetica, Arial, ou sans-serif. */
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+
+  /* Define o espaçamento entre linhas do texto como 1.5 vezes o tamanho da fonte, garantindo uma legibilidade adequada. */
   line-height: 1.5;
+
+  /* Define o peso da fonte como 400, que corresponde a uma fonte normal (não negrito). */
   font-weight: 400;
 }
