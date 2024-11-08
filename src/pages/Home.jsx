@@ -6,52 +6,123 @@ import {
   Grid,
   Heading,
   Skeleton,
-} from "@chakra-ui/react"; // Importa componentes da biblioteca Chakra UI para a interface.
-import { fetchTrending } from "../services/api"; // Função para buscar filmes/séries em tendência (do serviço da API).
-import CardComponent from "../components/CardComponent"; // Componente para exibir informações de cada filme/série em formato de cartão.
+  IconButton,
+  Text,
+} from "@chakra-ui/react";
+import { CloseIcon } from "@chakra-ui/icons";
+import { fetchTrending } from "../services/api";
+import CardComponent from "../components/CardComponent";
 
 const Home = () => {
-  const [data, setData] = useState([]); // Estado para armazenar os dados de filmes/séries em tendência.
-  const [loading, setLoading] = useState(true); // Estado para controlar o carregamento da página.
-  const [timeWindow, setTimeWindow] = useState("day"); // Estado para controlar o filtro de tendência: 'day' (hoje) ou 'week' (essa semana).
+  // Estado para armazenar dados dos filmes/séries em tendência
+  const [data, setData] = useState([]);
+  
+  // Estado para indicar se a página está carregando
+  const [loading, setLoading] = useState(true);
+  
+  // Estado para determinar o período de tendência: 'day' (hoje) ou 'week' (semana)
+  const [timeWindow, setTimeWindow] = useState("day");
+  
+  // Estado para controlar a visibilidade do pop-up de boas-vindas
+  const [isPopupVisible, setIsPopupVisible] = useState(true);
 
-  // Efeito para buscar os dados assim que o componente for montado ou quando o filtro timeWindow mudar.
+  // useEffect que busca os dados da API ao montar o componente ou ao mudar o filtro de tempo
   useEffect(() => {
-    setLoading(true); // Define o estado de carregamento como true quando começa a busca.
-    fetchTrending(timeWindow) // Chama a função fetchTrending passando o parâmetro timeWindow (dia ou semana).
+    setLoading(true); // Define estado de carregamento como verdadeiro antes da busca
+    fetchTrending(timeWindow) // Chama a função para buscar filmes/séries em tendência conforme o período
       .then((res) => {
-        setData(res); // Armazena os dados recebidos da API no estado 'data'.
+        setData(res); // Armazena os dados recebidos no estado 'data'
       })
       .catch((err) => {
-        console.log(err, "err"); // Em caso de erro, imprime no console.
+        console.log(err, "err"); // Loga erro no console, caso ocorra
       })
       .finally(() => {
-        setLoading(false); // Após o carregamento ser concluído (sucesso ou falha), define o estado de carregamento como false.
+        setLoading(false); // Define carregamento como falso após finalizar a busca
       });
-  }, [timeWindow]); // O efeito é executado sempre que 'timeWindow' mudar.
+  }, [timeWindow]); // Dependência no 'timeWindow' faz o efeito reexecutar quando o período de tempo muda
 
-  console.log(data, "data"); // Exibe os dados no console para debug (opcional).
+  // Função para fechar o pop-up de boas-vindas ao clicar no ícone de fechar
+  const closePopup = () => {
+    setIsPopupVisible(false);
+  };
 
   return (
-    <Container maxW={"container.xl"}> {/* Container para limitar a largura do conteúdo. */}
-      <Flex alignItems={"baseline"} gap={"4"} my={"10"}> {/* Flexbox para o título e os botões de filtro. */}
-        <Heading as="h2" fontSize={"md"} textTransform={"uppercase"}> {/* Título "Tendência" */}
+    <Container maxW={"container.xl"}>
+      {/* Pop-up de boas-vindas */}
+      {isPopupVisible && (
+        <Box
+          position="fixed"
+          top="0"
+          left="0"
+          right="0"
+          bottom="0"
+          bg="rgba(0, 0, 0, 0.4)" // Fundo escurecido para destacar o pop-up
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          zIndex="1000" // Define o pop-up no topo da camada de exibição
+        >
+          <Box
+            bg="gray.900"
+            p="9"
+            rounded="md"
+            boxShadow="lg"
+            position="relative"
+            maxWidth="480px"
+            textAlign="center"
+            borderColor="red.500"
+            borderWidth="3px"
+          >
+            {/* Botão para fechar o pop-up */}
+            <IconButton
+              icon={<CloseIcon />}
+              position="absolute"
+              top="2"
+              right="2"
+              onClick={closePopup} // Chama a função closePopup ao clicar
+              size="sm"
+              aria-label="Fechar pop-up"
+              bg="gray.700"
+              _hover={{ bg: "red.500" }}
+            />
+            {/* Título e descrição do pop-up */}
+            <Heading as="h1" size="lg" mb="4" color="white.600">
+             🎥 Bem-vindo ao Nextlab
+            </Heading>
+            <Text color="white.700">
+              Explore e busque seus filmes favoritos,<br />
+              
+              descubra o que está em alta e monte uma lista personalizada de filmes assistidos.<br /> 
+              <br></br>
+              Compartilhe suas opiniões: escreva sua resenha e avalie cada título com a sua perspectiva.<br />
+              <br></br>
+              Nossa plataforma foi feita para os apaixonados por cinema que querem registrar tudo que assistem.
+              Prepare a pipoca e boa diversão!
+            </Text>
+          </Box>
+        </Box>
+      )}
+
+      {/* Seção de título e filtro de tempo para exibir as tendências */}
+      <Flex alignItems={"baseline"} gap={"4"} my={"10"}>
+        <Heading as="h2" fontSize={"md"} textTransform={"uppercase"}>
           Tendência
         </Heading>
+        {/* Botões para escolher entre 'Hoje' e 'Nessa Semana' */}
         <Flex
           alignItems={"center"}
           gap={"2"}
-          border={"1px solid teal"}
+          border={"1px solid red"}
           borderRadius={"20px"}
         >
-          {/* Botões de filtro para escolher entre 'Hoje' e 'Nessa Semana' */}
           <Box
             as="button"
             px="3"
             py="1"
             borderRadius={"20px"}
-            bg={`${timeWindow === "day" ? "gray.800" : ""}`} // Aplica o fundo cinza se 'timeWindow' for 'day'.
-            onClick={() => setTimeWindow("day")} // Muda o filtro para 'day' quando clicado.
+            bg={`${timeWindow === "day" ? "red.600" : "gray.200"}`} // Define cor de fundo para 'Hoje' selecionado
+            color={`${timeWindow === "day" ? "white" : "gray.700"}`}
+            onClick={() => setTimeWindow("day")} // Atualiza o período para 'day' ao clicar
           >
             Hoje
           </Box>
@@ -60,34 +131,36 @@ const Home = () => {
             px="3"
             py="1"
             borderRadius={"20px"}
-            bg={`${timeWindow === "week" ? "gray.800" : ""}`} // Aplica o fundo cinza se 'timeWindow' for 'week'.
-            onClick={() => setTimeWindow("week")} // Muda o filtro para 'week' quando clicado.
+            bg={`${timeWindow === "week" ? "red.600" : "gray.200"}`} // Define cor de fundo para 'Nessa Semana' selecionado
+            color={`${timeWindow === "week" ? "white" : "gray.700"}`}
+            onClick={() => setTimeWindow("week")} // Atualiza o período para 'week' ao clicar
           >
             Nessa Semana
           </Box>
         </Flex>
       </Flex>
-      
-      {/* Grid que exibe os filmes/séries em tendência. Cada coluna é adaptável conforme a largura da tela. */}
+
+      {/* Grid de exibição dos filmes/séries em tendência */}
       <Grid
         templateColumns={{
-          base: "1fr", // Para telas pequenas (base), exibe uma coluna.
-          sm: "repeat(2, 1fr)", // Para telas pequenas médias (sm), exibe duas colunas.
-          md: "repeat(4, 1fr)", // Para telas médias (md), exibe quatro colunas.
-          lg: "repeat(5, 1fr)", // Para telas grandes (lg), exibe cinco colunas.
+          base: "1fr", // Coluna única para telas pequenas
+          sm: "repeat(2, 1fr)", // Duas colunas para telas médias
+          md: "repeat(4, 1fr)", // Quatro colunas para telas maiores
+          lg: "repeat(5, 1fr)", // Cinco colunas para telas grandes
         }}
-        gap={"4"} // Espaçamento entre os itens do grid.
+        gap={"4"} // Espaço entre os itens do grid
       >
-        {data && // Verifica se há dados para exibir.
-          data?.map((item, i) =>
-            loading ? ( // Se os dados ainda estão sendo carregados, exibe um Skeleton (carregamento visual).
-              <Skeleton height={300} key={i} /> // Skeleton de altura 300px para simular o carregamento do item.
+        {data &&
+          data.map((item, i) =>
+            loading ? (
+              // Exibe um Skeleton (efeito de carregamento) enquanto dados são carregados
+              <Skeleton height={300} key={i} />
             ) : (
-              // Quando os dados estiverem prontos, exibe o CardComponent para cada item.
+              // Renderiza o componente CardComponent para cada item do array de dados
               <CardComponent
-                key={item?.id} // A chave única para cada item (baseada no ID).
-                item={item} // Passa os dados do item para o componente Card.
-                type={item?.media_type} // Passa o tipo de mídia (filme ou série).
+                key={item?.id} // Atribui chave única baseada no ID do item
+                item={item} // Passa os dados do item para o CardComponent
+                type={item?.media_type} // Define o tipo de mídia (filme ou série)
               />
             )
           )}
